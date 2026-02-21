@@ -1,5 +1,5 @@
-"""Database package exports."""
+"""Database package with async-first interfaces for persistence layers."""
 
-from app.db.base import Base
+from .interfaces import AsyncSessionFactory, UnitOfWork
 
-__all__ = ["Base"]
+__all__ = ["AsyncSessionFactory", "UnitOfWork"]
