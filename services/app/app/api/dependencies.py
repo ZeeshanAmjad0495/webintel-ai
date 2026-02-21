@@ -3,7 +3,10 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
+from app.analysis import DeterministicAnalyzer
 from app.analysis.interfaces import Analyzer
+
+_analyzer: Analyzer = DeterministicAnalyzer()
 
 
 @asynccontextmanager
@@ -22,9 +25,6 @@ async def get_db_session() -> AsyncIterator[object]:
 
 
 async def get_analysis_service() -> Analyzer:
-    """Return the analysis service implementation for request handlers.
+    """Return the configured analysis service implementation for request handlers."""
 
-    Raises:
-        NotImplementedError: Until a concrete analyzer is registered.
-    """
-    raise NotImplementedError("No analyzer has been configured yet.")
+    return _analyzer
