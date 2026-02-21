@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 
 from app.api.routers import api_router, metrics_router
+from app.api.routers.dashboard import router as dashboard_router
 from app.core.config import Settings, get_settings
 from app.core.logger import configure_logging
 
@@ -24,6 +25,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         debug=resolved_settings.debug,
         version=resolved_settings.app_version,
     )
+    application.include_router(dashboard_router)
     application.include_router(api_router, prefix=resolved_settings.api_prefix)
     application.include_router(metrics_router)
     return application
