@@ -1,22 +1,31 @@
+"""FastAPI application factory and router registration."""
+
 from fastapi import FastAPI
 
-from app.api.routers import jobs, metrics, monitors, tasks
+from app.api.routers import api_router
+from app.core.config import Settings, get_settings
+from app.core.logger import configure_logging
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(title="WebIntel API")
+def create_app(settings: Settings | None = None) -> FastAPI:
+    """Build and configure the FastAPI application instance.
 
-    api_routers = [tasks.router, jobs.router, monitors.router]
-    for router in api_routers:
-        app.include_router(router, prefix="/api")
+    Args:
+        settings: Optional settings override for tests or custom runtime wiring.
 
-    app.include_router(metrics.router)
+    Returns:
+        A configured :class:`fastapi.FastAPI` application.
+    """
+    resolved_settings = settings or get_settings()
+    configure_logging(log_level=resolved_settings.log_level)
 
-    @app.get("/health")
-    async def healthcheck() -> dict[str, str]:
-        return {"status": "ok"}
-
-    return app
+    application = FastAPI(
+        title=resolved_settings.app_name,
+        debug=resolved_settings.debug,
+        version=resolved_settings.app_version,
+    )
+    application.include_router(api_router, prefix=resolved_settings.api_prefix)
+    return application
 
 
 app = create_app()
