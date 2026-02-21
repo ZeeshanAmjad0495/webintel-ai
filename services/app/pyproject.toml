@@ -1,20 +1,25 @@
 [project]
 name = "webintel-app"
 version = "0.1.0"
-description = "WebIntel API service"
-requires-python = ">=3.11"
+description = "WebIntel AI API service"
+requires-python = ">=3.10"
 dependencies = [
   "fastapi>=0.115.0",
   "uvicorn>=0.30.0",
   "pydantic>=2.8.0",
-  "prometheus-client>=0.20.0"
+  "pydantic-settings>=2.4.0",
+  "sqlalchemy>=2.0.32",
+  "asyncpg>=0.29.0",
+  "httpx>=0.27.0",
+  "structlog>=24.4.0",
+  "prometheus-client>=0.20.0",
+  "alembic>=1.13.2"
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3.0",
   "pytest-asyncio>=0.23.0",
-  "httpx>=0.27.0",
   "ruff>=0.6.0"
 ]
 
@@ -28,4 +33,4 @@ pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py310"
