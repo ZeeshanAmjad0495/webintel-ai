@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-from app.api.routers import api_router
+from app.api.routers import api_router, metrics_router
 from app.core.config import Settings, get_settings
 from app.core.logger import configure_logging
 
@@ -25,6 +25,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version=resolved_settings.app_version,
     )
     application.include_router(api_router, prefix=resolved_settings.api_prefix)
+    application.include_router(metrics_router)
     return application
 
 
