@@ -2,13 +2,21 @@ from fastapi import FastAPI
 
 from app.api.routers import jobs, metrics, monitors, tasks
 
-app = FastAPI(title="WebIntel API")
-app.include_router(tasks.router, prefix="/api")
-app.include_router(jobs.router, prefix="/api")
-app.include_router(monitors.router, prefix="/api")
-app.include_router(metrics.router)
+
+def create_app() -> FastAPI:
+    app = FastAPI(title="WebIntel API")
+
+    api_routers = [tasks.router, jobs.router, monitors.router]
+    for router in api_routers:
+        app.include_router(router, prefix="/api")
+
+    app.include_router(metrics.router)
+
+    @app.get("/health")
+    async def healthcheck() -> dict[str, str]:
+        return {"status": "ok"}
+
+    return app
 
 
-@app.get("/health")
-async def healthcheck() -> dict[str, str]:
-    return {"status": "ok"}
+app = create_app()
